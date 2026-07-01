@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>The Interview and the Leap</title>
+<meta name="description" content="A personal reflection by Prashant Panta." />
+<meta name="author" content="Prashant Panta" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;1,8..60,400&display=swap" rel="stylesheet" />
+
+<style>
+  :root {
+    /* Light — warm parchment, ink text, muted ink-blue accent */
+    --bg:            #f4efe6;
+    --bg-deep:       #efe8db;
+    --text:          #33302b;
+    --text-soft:     #6b6459;
+    --text-faint:    #9c9384;
+    --rule:          #d8cfbe;
+    --accent:        #4a5d6e;   /* muted ink blue */
+    --accent-soft:   #7d8b98;
+    --selection:     #dfe4e6;
+    --drop:          #3f4e5c;
+    --progress:      #8a9aa6;
+    --shadow:        0 1px 40px rgba(60, 52, 40, 0.06);
+  }
+
+  :root[data-theme="dark"] {
+    /* Dark — deep warm slate, never pure black */
+    --bg:            #1c1b19;
+    --bg-deep:       #191816;
+    --text:          #ddd6c9;
+    --text-soft:     #a49c8d;
+    --text-faint:    #776f60;
+    --rule:          #38352f;
+    --accent:        #9bb0c0;
+    --accent-soft:   #7a8b98;
+    --selection:     #2f3a42;
+    --drop:          #a9bccb;
+    --progress:      #6f8290;
+    --shadow:        0 1px 50px rgba(0, 0, 0, 0.35);
+  }
+
+  * { box-sizing: border-box; }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+    }
+  }
+
+  body {
+    margin: 0;
+    background-color: var(--bg);
+    color: var(--text);
+    font-family: "Source Serif 4", Georgia, serif;
+    font-weight: 400;
+    font-size: 1.18rem;
+    line-height: 1.75;
+    letter-spacing: 0.002em;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    transition: background-color 0.5s ease, color 0.5s ease;
+  }
+
+  ::selection {
+    background: var(--selection);
+    color: var(--text);
+  }
+
+  /* ---- Reading progress bar ---- */
+  .progress-track {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: transparent;
+    z-index: 100;
+  }
+  .progress-fill {
+    height: 100%;
+    width: 0%;
+    background: var(--progress);
+    transition: width 0.08s linear;
+  }
+
+  /* ---- Theme toggle ---- */
+  .theme-toggle {
+    position: fixed;
+    top: 1.4rem; right: 1.4rem;
+    z-index: 90;
+    width: 40px; height: 40px;
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--rule);
+    border-radius: 50%;
+    background: var(--bg-deep);
+    color: var(--text-soft);
+    cursor: pointer;
+    transition: color 0.3s ease, border-color 0.3s ease, background-color 0.3s ease, transform 0.3s ease;
+  }
+  .theme-toggle:hover { color: var(--accent); border-color: var(--accent-soft); }
+  .theme-toggle:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+  .theme-toggle svg { width: 18px; height: 18px; }
+  .theme-toggle .icon-moon { display: none; }
+  :root[data-theme="dark"] .theme-toggle .icon-sun  { display: none; }
+  :root[data-theme="dark"] .theme-toggle .icon-moon { display: block; }
+
+  /* ---- Layout column ---- */
+  .wrap {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  /* ---- Hero ---- */
+  header.hero {
+    min-height: 92vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 6rem 0 4rem;
+  }
+
+  .eyebrow {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-style: italic;
+    font-size: 0.98rem;
+    letter-spacing: 0.06em;
+    color: var(--accent);
+    margin: 0 0 1.4rem;
+  }
+
+  h1.title {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-weight: 500;
+    font-size: clamp(2.8rem, 8vw, 4.6rem);
+    line-height: 1.04;
+    letter-spacing: 0.005em;
+    margin: 0 0 1.6rem;
+    color: var(--text);
+  }
+
+  .meta {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 0.9rem;
+    letter-spacing: 0.04em;
+    color: var(--text-faint);
+    margin: 0 0 3rem;
+    text-transform: uppercase;
+  }
+  .meta span { white-space: nowrap; }
+  .meta .dot { margin: 0 0.6rem; color: var(--rule); }
+
+  .hero-lede {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-weight: 400;
+    font-size: clamp(1.4rem, 3.2vw, 1.72rem);
+    line-height: 1.55;
+    color: var(--text-soft);
+    margin: 0;
+  }
+
+  /* ---- Divider before essay ---- */
+  .lead-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin: 1rem 0 4.5rem;
+    color: var(--accent-soft);
+  }
+  .lead-divider .line {
+    height: 1px;
+    width: 64px;
+    background: linear-gradient(to var(--dir, right), transparent, var(--rule));
+  }
+  .lead-divider .line.left  { --dir: left; }
+  .lead-divider .dot {
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: var(--accent-soft);
+  }
+
+  /* ---- Essay body ---- */
+  article { padding-bottom: 2rem; }
+
+  article p {
+    margin: 0 0 1.6rem;
+    hanging-punctuation: first;
+  }
+
+  /* Drop cap on the first paragraph */
+  article > .first-para::first-letter {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-weight: 600;
+    float: left;
+    font-size: 4.6rem;
+    line-height: 0.72;
+    padding: 0.34rem 0.6rem 0 0;
+    color: var(--drop);
+  }
+
+  /* Fade-in reveal */
+  .reveal {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 1s ease, transform 1s ease;
+    will-change: opacity, transform;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .reveal { opacity: 1; transform: none; }
+  }
+
+  /* Section break rule between movements */
+  hr.break {
+    border: none;
+    height: 1px;
+    width: 100%;
+    max-width: 220px;
+    margin: 3.2rem auto;
+    background: linear-gradient(to right, transparent, var(--rule) 20%, var(--rule) 80%, transparent);
+  }
+
+  /* ---- Footer ---- */
+  footer {
+    padding: 5rem 0 6rem;
+    text-align: center;
+  }
+  footer .footer-rule {
+    height: 1px;
+    width: 100px;
+    margin: 0 auto 2.5rem;
+    background: linear-gradient(to right, transparent, var(--rule), transparent);
+  }
+  footer .thanks {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-style: italic;
+    font-size: 1.5rem;
+    color: var(--text-soft);
+    margin: 0 0 1.6rem;
+  }
+  footer .byline {
+    font-size: 0.9rem;
+    letter-spacing: 0.03em;
+    color: var(--text-faint);
+    margin: 0;
+  }
+  footer .byline a {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 1px;
+    transition: border-color 0.3s ease, color 0.3s ease;
+  }
+  footer .byline a:hover { border-color: var(--accent); }
+  footer .byline a:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+
+  /* ---- Responsive ---- */
+  @media (max-width: 640px) {
+    body { font-size: 1.1rem; line-height: 1.72; }
+    .wrap { padding: 0 1.4rem; }
+    header.hero { min-height: 90vh; padding: 4.5rem 0 3rem; }
+    .meta { font-size: 0.82rem; }
+    .meta .dot { margin: 0 0.4rem; }
+    article > .first-para::first-letter { font-size: 3.9rem; padding-right: 0.5rem; }
+    .lead-divider { margin: 0.5rem 0 3.5rem; }
+    .lead-divider .line { width: 44px; }
+  }
+
+  @media (min-width: 1400px) {
+    body { font-size: 1.24rem; }
+  }
+
+  /* Skip link */
+  .skip-link {
+    position: absolute;
+    left: -999px;
+    top: 0;
+    background: var(--accent);
+    color: var(--bg);
+    padding: 0.6rem 1rem;
+    z-index: 200;
+    border-radius: 0 0 4px 0;
+  }
+  .skip-link:focus { left: 0; }
+</style>
+</head>
+<body>
+
+<a class="skip-link" href="#essay">Skip to essay</a>
+
+<div class="progress-track" aria-hidden="true">
+  <div class="progress-fill" id="progress"></div>
+</div>
+
+<button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle dark mode" title="Toggle theme">
+  <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <circle cx="12" cy="12" r="4"></circle>
+    <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
+  </svg>
+  <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
+  </svg>
+</button>
+
+<div class="wrap">
+
+  <header class="hero">
+    <p class="eyebrow">A personal reflection</p>
+    <h1 class="title">The Interview and the Leap</h1>
+    <p class="meta">
+      <span>Prashant Panta</span>
+      <span class="dot">&middot;</span>
+      <span id="readingTime">— min read</span>
+    </p>
+    <p class="hero-lede">
+      There is a particular kind of person who can sit with a stranger for an hour and walk away holding the most careful parts of their life. People feel it within minutes of meeting him. Something in his manner says it is safe here, you can set the heavy thing down, I will not flinch.
+    </p>
+  </header>
+
+  <div class="lead-divider" aria-hidden="true">
+    <span class="line left"></span>
+    <span class="dot"></span>
+    <span class="line"></span>
+  </div>
+
+  <article id="essay">
+
+    <p class="first-para reveal">There is a particular kind of person who can sit with a stranger for an hour and walk away holding the most careful parts of their life. People feel it within minutes of meeting him. Something in his manner says it is safe here, you can set the heavy thing down, I will not flinch. So they do. They hand over the divorce, the dead father, the version of themselves they do not show at parties. He listens. He says something true and quiet that they carry home. And then they leave, lighter, and he stays exactly where he was, holding everyone's stories and none of his own.</p>
+
+    <p class="reveal">I am that person. I have been told I am wise for my age, that I notice what others miss, that no one thinks as much as I do. For a long time I wore this as a compliment without examining it too closely. It was only after a particular weekend, after a particular sleepless night, that I turned it over and saw the other face of the coin. The same gift that makes me the one people open up to is the gift that keeps me on the outside of my own life, watching it happen to other people. I am very good at the interview. I have never once managed the leap.</p>
+
+    <p class="reveal">I want to write about the difference, because I think it is one of the quieter traps a thoughtful person can fall into, and I think I am only one of many sitting in it.</p>
+
+    <p class="reveal">The weekend itself is almost not worth describing, which is the point. A girl I had known loosely for three years, more as a thread than a friendship, finally crossed my path in the city we both now live in. I arranged the meeting the way I arrange everything, generously and with logistics. I brought a friend who is quick and warm and unbothered, the kind of person who walks into a room and rearranges its temperature without trying. Over two days the obvious happened. The lightness in the room found him, not me. By the end she was laughing at his jokes and looking for him when he stepped away, and he, being who he is, met it with ease. There was a date by Tuesday. It was not mine.</p>
+
+    <p class="reveal">I spent the night after it deciding I was broken. This is the part I am least proud of and most want to be honest about, because I suspect it is the most common experience in the world and the least often admitted. In the space of a few dark hours I built an entire cathedral of unworthiness and moved into it. I told myself I would never understand this, that some people are made for it and I am made only to listen, that relationships are a language I will never speak. I considered deleting everything and disappearing into my work, and I dressed that impulse up as discipline so I would not have to call it what it was, which was hiding.</p>
+
+    <p class="reveal">In the morning the cathedral was still standing but I could see the scaffolding. And the thing I noticed, once I could think again, was that the verdict had arrived with far too much certainty for how little evidence it had. Real conclusions about yourself do not come at three in the morning after one bad day. They do not need to shout. The voice that had spent the night convincing me I was worthless had also, in passing, taken the single best thing about me, the ability to make another person feel safe, and tossed it on the table as a consolation prize. Nothing much, it said. Just listening. Just wisdom. That was the tell. Anything that turns your rarest quality into evidence against you is not insight. It is a spiral wearing the mask of insight, and you should stop letting it testify.</p>
+
+    <p class="reveal">So I set the verdict aside and looked at the actual mechanism instead, the way I would look at a system that failed rather than a person who deserved to.</p>
+
+    <p class="reveal">Here is what I found. I do not lose because I am soft, or slow, or insufficiently clever about people. I read people fine. Often I read them too well, which is its own problem, because the reading becomes a place to stand instead of a thing I do on the way to acting. What I do, every time, is conduct an interview. I want to know someone before I want them out loud. I gather. I verify. I build a careful and accurate picture of who they are, and I keep building it, and at no point in the building do I ever let them feel that I am interested. I treat the question of whether I like someone as something to be settled privately, in my own head, on my own schedule, after which I will perhaps, if everything checks out, make some small approach so understated that it could be deniable in court.</p>
+
+    <p class="reveal">The trouble is that nobody can feel an interest you are keeping in your head. From the outside, a man conducting a warm and thorough interview looks exactly like a friend. Not a candidate. A friend. And the longer the interview runs, the more permanent that impression becomes, until one day you finally feel ready to make your move and discover that the category was decided months ago, by your own silence, and you were the one who filed yourself under the wrong heading.</p>
+
+    <p class="reveal">I had inverted the order of the whole thing. I believed certainty came first and the risk came after, that you earn the right to show interest by first confirming the person is worth it. But it runs the other way. The interest comes first, lightly, as a hypothesis, and the knowing comes after, on the date the interest earned you. You are allowed to want someone before you have vetted them. You are supposed to. The vetting is what the wanting is for. I had been treating the date as a reward for a verification that, by design, could never finish, because there is always one more thing to learn about a person, one more conversation before you are sure, and sure never arrives. Sure is not a place you reach by waiting. It is a place you reach by acting and seeing what happens.</p>
+
+    <p class="reveal">There is a finer point inside this that took me longer to see, and it embarrasses me a little, because it undoes something I was proud of. I had thought my problem might be that I do not compliment, that I hold too much back. But I do compliment, constantly and well. I told her she spoke about her work as if she breathed it. I told her that her passions were rare, that her mind was the kind of mind I respected. I believed these were the finest things I could offer, and in a way they were, because they cost real attention to form. And they slid off her like water. Meanwhile someone else said something almost weightless, a passing remark that he liked the way she smelled, and it landed, because it carried the one thing my careful sentences did not. My compliments had content and no charge. His had charge and almost no content. And the charge, it turns out, is the whole thing. The charge is what tells another person you are not studying them, that you have noticed them as someone wanted and not only as someone interesting. I had been bringing the deepest admiration I had to a moment that needed a spark, and then concluding from its failure that depth does not work for me. But depth was never the thing that failed. I had simply never once let a single sentence carry the small unmistakable heat that says this is not friendship. I gave content where a spark was needed and called the content my sincerity.</p>
+
+    <p class="reveal">This is where my friend deserves better than the role I keep wanting to cast him in. It is easy, when you lose, to decide the other person cheated, and there is a version of this story I could tell that way. But it would be a lie of convenience, and I have enough of those. The truth is simpler and harder. He did not take something from me. He did the thing I will not do. He let himself be seen wanting, immediately, without a guarantee, and he absorbed the awkwardness of that without treating it as proof of anything. What looks from the outside like charm or nerve is mostly just a willingness to act before the proof arrives. That is the entire trick. There is no second secret behind it. He is not smoother than I am wise. He simply pays a tax I have spent my whole life refusing to pay, and so he gets to go places I only ever describe.</p>
+
+    <p class="reveal">He told me, more than once that weekend, that I do not have to change who I am. That the softness is not a flaw, that the depth is rare, that people will always want to sit and talk with me. He was right, and I want to record that he was right, because the lesson is not that I should become him. A person who tries to become his opposite usually just loses himself and gains nothing. The lesson is narrower and entirely mine to learn. Keep the warmth. Keep the depth. Keep the long patient conversations that make a stranger feel held. And then, somewhere near the start of it, when I actually like someone, let a little of that interest show, in a form small enough that it costs almost nothing and clear enough that it cannot be mistaken for friendship. One sentence does most of the work. I would like to take you to dinner, just the two of us. The word just is the whole leap, compressed. It changes nothing about my nature and everything about my outcome.</p>
+
+    <p class="reveal">I used to think the reason I would not say a sentence like that was consideration. I did not want to make her uncomfortable. I did not want to presume. I dressed my fear in the clothes of respect and admired how noble it looked. But a clear and gentle question does not make anyone uncomfortable. It hands them a real choice, easy to accept and easy to decline, which is the most respectful thing one person can offer another. What I was calling consideration was, in its lower half, simply fear, arranged so that I would never have to hear no. Real kindness and real honesty turned out to be the same act. Ask plainly. Accept the answer. Let it be cheap to find out, instead of expensive to keep wondering.</p>
+
+    <p class="reveal">For most of my life I have carried a sentence other people handed me, that I can meet them at their depths but they cannot meet me at mine, that something about how far down I go frightens them off. I held this the way you hold a stone you have decided is precious, because it was a flattering thing to believe. It told me I was not unwanted but unreachable, which is a far gentler verdict. But I have started to suspect the stone is not what I thought. People are not afraid of my depths. Most of them have never been shown them. I am so practiced at drawing others out, at being the safe place where a person sets down the heaviest thing they carry, that the conversation never turns around and comes back toward me, and neither of us notices that it should. They feel met. They also feel, correctly, that they cannot reach me. And then I stand up at the end still holding everything I walked in with, and I call the distance depth, when a good deal of it is only that I never go second. I never hand my own weight across the table. I have made myself the door everyone walks through and wondered why I am always the one left outside.</p>
+
+    <p class="reveal">It is the same motion missing in both rooms. With someone I am drawn to, it is the small charged sentence offered before I am sure. With a friend, it is the heavy thing handed over instead of only received. In each case it is the willingness to reach first, in the dark, before I know whether the reaching will be returned. I had believed connection was something that converges on its own if you are patient and attentive enough, that my part was to wait for the thread to find me and to be ready when it did. But threads do not tie themselves. Someone has to reach across and make the knot, and the reaching is always an unguaranteed motion made before you can be certain it will hold.</p>
+
+    <p class="reveal">So this is what I am taking from a weekend that, for one night, I mistook for a sentence passed on my whole worth. I am not broken and I am not behind. I am twenty three years old and I have missed nothing. I have simply been trying to win by understanding everyone so completely that I would never have to take a risk, and that is not a strategy, it is a very sophisticated way of staying still. The reading was never the problem. The problem was treating the reading as the destination instead of the runway.</p>
+
+    <p class="reveal">The next time something matters to me, I am going to do the thing I find almost impossible. I am going to let the interest show before I am sure, in a sentence small enough to survive a no, and I am going to feel the awkwardness of it and not flee. It will be uncomfortable the first several times. That discomfort is not a sign that I am doing it wrong. It is the tax, the same one everyone who ever looked easy at this quietly paid. I have spent years collecting other people's stories because it felt safer than risking one of my own. It is time to be a participant with something at stake, and not only the wise listener at the edge of the room, holding everyone's threads and never once tying his own. I am told I am wise for my age. Perhaps. But the wisest thing I have managed lately is the recognition that I have been mistaking my caution for my character, and that the cure was never to become shallower. It was only to go first.</p>
+
+  </article>
+
+  <footer>
+    <div class="footer-rule" aria-hidden="true"></div>
+    <p class="thanks">Thank you for reading.</p>
+    <p class="byline">
+      Written by Prashant Panta &nbsp;&middot;&nbsp;
+      <a href="https://prashantpanta.com" target="_blank" rel="noopener">prashantpanta.com</a>
+    </p>
+  </footer>
+
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ---- Theme: system preference + manual toggle ---- */
+  var root = document.documentElement;
+  var toggle = document.getElementById("themeToggle");
+  var stored = null;
+  try { stored = localStorage.getItem("essay-theme"); } catch (e) {}
+
+  var media = window.matchMedia("(prefers-color-scheme: dark)");
+
+  function applyTheme(theme) {
+    root.setAttribute("data-theme", theme);
+    toggle.setAttribute("aria-pressed", theme === "dark" ? "true" : "false");
+  }
+
+  applyTheme(stored ? stored : (media.matches ? "dark" : "light"));
+
+  media.addEventListener("change", function (e) {
+    var hasStored = false;
+    try { hasStored = !!localStorage.getItem("essay-theme"); } catch (err) {}
+    if (!hasStored) applyTheme(e.matches ? "dark" : "light");
+  });
+
+  toggle.addEventListener("click", function () {
+    var next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+    applyTheme(next);
+    try { localStorage.setItem("essay-theme", next); } catch (e) {}
+  });
+
+  /* ---- Reading time ---- */
+  var article = document.getElementById("essay");
+  var words = article.innerText.trim().split(/\s+/).length;
+  var minutes = Math.max(1, Math.round(words / 220));
+  document.getElementById("readingTime").textContent = minutes + " min read";
+
+  /* ---- Reading progress ---- */
+  var progress = document.getElementById("progress");
+  var ticking = false;
+  function updateProgress() {
+    var scrollTop = window.scrollY || document.documentElement.scrollTop;
+    var height = document.documentElement.scrollHeight - window.innerHeight;
+    var pct = height > 0 ? (scrollTop / height) * 100 : 0;
+    progress.style.width = Math.min(100, Math.max(0, pct)) + "%";
+    ticking = false;
+  }
+  window.addEventListener("scroll", function () {
+    if (!ticking) {
+      window.requestAnimationFrame(updateProgress);
+      ticking = true;
+    }
+  }, { passive: true });
+  updateProgress();
+
+  /* ---- Fade-in on scroll ---- */
+  var reveals = document.querySelectorAll(".reveal");
+  var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  if (reduceMotion || !("IntersectionObserver" in window)) {
+    reveals.forEach(function (el) { el.classList.add("visible"); });
+  } else {
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("visible");
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { rootMargin: "0px 0px -8% 0px", threshold: 0.05 });
+    reveals.forEach(function (el) { observer.observe(el); });
+  }
+})();
+</script>
+
+</body>
+</html>
